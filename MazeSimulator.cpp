@@ -1,7 +1,7 @@
 #include "MazeSimulator.h"
 
 #include <stdexcept>
-
+#include <iostream>
 #include <cassert>
 #include <cstdio>
 
@@ -19,7 +19,7 @@ std::string MazeSimulator::serialize() const
         return value ? SERIALIZED_WALL : SERIALIZED_SPACE;
     };
     
-    char box[SERIALIZED_WALL_SIZE][SERIALIZED_WALL_SIZE] = { NULL };
+    char maze[SERIALIZED_WALL_SIZE][SERIALIZED_WALL_SIZE] = { NULL };
     for (size_t y = 0; y < WALL_SIZE; ++y) {
         for (size_t x = 0; x < WALL_SIZE; ++x) {
 
@@ -29,31 +29,80 @@ std::string MazeSimulator::serialize() const
             const auto& east = boxes.get(x, y).EAST;
 
             // space
-            box[x * 2 + 1][y * 2 + 1] = SERIALIZED_SPACE;
+            maze[x * 2 + 1][y * 2 + 1] = SERIALIZED_SPACE;
 
             // walls
-            box[x * 2 + 1][y * 2] = serialize_wall(north);
-            box[x * 2 + 1][y * 2 + 2] = serialize_wall(south);
-            box[x * 2][y * 2 + 1] = serialize_wall(west);
-            box[x * 2 + 2][y * 2 + 1] = serialize_wall(east);
+            maze[x * 2 + 1][y * 2] = serialize_wall(north);
+            maze[x * 2 + 1][y * 2 + 2] = serialize_wall(south);
+            maze[x * 2][y * 2 + 1] = serialize_wall(west);
+            maze[x * 2 + 2][y * 2 + 1] = serialize_wall(east);
 
         } 
     }
 
-    //TODO: validate corners
-    /*
-            // corners
-            box[x * 2][y * 2] = serialize_wall(north || west);
-            box[x * 2][y * 2 + 2] = serialize_wall(south || west);
-            box[x * 2 + 2][y * 2] = serialize_wall(north || east);
-            box[x * 2 + 2][y * 2 + 2] = serialize_wall(south || east);
-    */
+    //corners
+
+    for (size_t y = 0; y < SERIALIZED_WALL_SIZE; y+=2) {
+        int y_maze = y / 2; 
+        for (size_t x = 0; x < SERIALIZED_WALL_SIZE; x+=2) {
+            int x_maze = x / 2;
+            if (y == 0) {
+                if (x == 0) {
+                    //left top corner
+                    maze[x][y] = serialize_wall(boxes.get(x_maze, y_maze).NORTH && boxes.get(x_maze, y_maze).WEST);
+                }
+                else if (x == SERIALIZED_WALL_SIZE - 1) {
+                    //right top corner
+                    maze[x][y] = serialize_wall(boxes.get(x_maze - 1, y_maze).NORTH && boxes.get(x_maze - 1, y_maze).EAST);
+                }
+                else {
+                    //top maze wall
+                    maze[x][y] = serialize_wall(boxes.get(x_maze - 1, y_maze).NORTH && boxes.get(x_maze, y_maze).NORTH);
+                }
+            }
+            else if (y == SERIALIZED_WALL_SIZE - 1) {
+                if (x == 0) {
+                    //left bottom corner
+                    maze[x][y] = serialize_wall(boxes.get(x_maze, y_maze - 1).WEST && boxes.get(x_maze, y_maze - 1).SOUTH);
+                }
+                else if (x == SERIALIZED_WALL_SIZE - 1) {
+                    //right bottom corner
+                    maze[x][y] = serialize_wall(boxes.get(x_maze - 1, y_maze - 1).EAST && boxes.get(x_maze - 1, y_maze - 1).SOUTH);
+                }
+                else {
+                    //bottom maze wall
+                    maze[x][y] = serialize_wall(boxes.get(x_maze - 1 , y_maze - 1).SOUTH && boxes.get(x_maze, y_maze - 1).SOUTH); 
+                }
+            }
+            else if (x == 0) {
+                //left maze wall
+                if (y != 0 && y != SERIALIZED_WALL_SIZE - 1) {
+                    maze[x][y] = serialize_wall(boxes.get(x_maze, y_maze - 1).WEST && boxes.get(x_maze, y_maze).WEST);
+                }
+
+            }
+            else if (x == SERIALIZED_WALL_SIZE - 1) {
+                //right maze wall
+                if (y != 0 && y != SERIALIZED_WALL_SIZE - 1) {
+                    maze[x][y] = serialize_wall(boxes.get(x_maze - 1, y_maze - 1).EAST && boxes.get(x_maze - 1, y_maze).EAST);
+                }
+            }
+            else{
+                const auto& north = boxes.get(x_maze - 1, y_maze - 1).EAST;
+                const auto& south = boxes.get(x_maze, y_maze).WEST;
+                const auto& west = boxes.get(x_maze - 1, y_maze - 1).SOUTH;
+                const auto& east = boxes.get(x_maze, y_maze).NORTH;
+
+                maze[x][y] = serialize_wall((north + south + west + east) > 1);
+            }
+        }   
+    }
 
     std::string serialized = std::string();
     serialized.reserve(SERIALIZED_SIZE);
     for (size_t y = 0; y < SERIALIZED_WALL_SIZE; ++y) {
         for (size_t x = 0; x < SERIALIZED_WALL_SIZE; ++x) {
-            serialized.append(1, box[x][y]);
+            serialized.append(1, maze[x][y]);
         }
         serialized.append("\n");
     }

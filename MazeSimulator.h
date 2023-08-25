@@ -1,28 +1,31 @@
 #pragma once
 
 #include <string>
-#include <array>
-#include <memory>
+
+#include "Array2d.h"
 
 class MazeSimulator
 {
 private:
-	//wewnêtrzna struktura
-	static const unsigned int WallSize = 16;
-	
-	struct Walls {
+	static const size_t WALL_SIZE = 16;
+
+	struct Box {
 		bool NORTH, SOUTH, WEST, EAST;
 	};
-	using WallsMatrix = std::array<Walls, WallSize * WallSize>;
-	static unsigned int wall_matrix_offset(const unsigned int& x, const unsigned int& y);
 	
-	using WallsMatrixPtr = std::unique_ptr<WallsMatrix>;
-	WallsMatrixPtr walls_matrix_ptr;
+	using Boxes = Array2d<Box, WALL_SIZE, WALL_SIZE>;
+	Boxes boxes;
 
 private:
-	MazeSimulator(WallsMatrixPtr&& walls_matrix_ptr);
+	MazeSimulator(Boxes&& boxes);
 
 public:
+	static const char SERIALIZED_WALL = '#';
+	static const char SERIALIZED_SPACE = ' ';
+
+	static const size_t SERIALIZED_WALL_SIZE = WALL_SIZE + 2 + WALL_SIZE - 1;
+	static const size_t SERIALIZED_SIZE = (SERIALIZED_WALL_SIZE + 1) * SERIALIZED_WALL_SIZE;
+
 	std::string serialize() const;
 	static MazeSimulator parse(const std::string& input);
 };

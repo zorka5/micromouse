@@ -1,112 +1,118 @@
 #include "MazeSimulator.h"
-#include <fstream>
-#include <sstream>
-#include <iostream>
+
+#include <stdexcept>
+
 #include <cassert>
+#include <cstdio>
 
-unsigned int MazeSimulator::wall_matrix_offset(const unsigned int& x, const unsigned int& y)
+MazeSimulator::MazeSimulator(Boxes&& boxes):
+    boxes(std::move(boxes))
 {
-    return WallSize * y + x;
-}
-
-MazeSimulator::MazeSimulator(WallsMatrixPtr&& walls_matrix_ptr):
-    walls_matrix_ptr(std::move(walls_matrix_ptr))
-{
+    // TODO: add validation
+    // - row + 1 north == row south etc
+    // - all borders around are set
 }
 
 std::string MazeSimulator::serialize() const
 {
-    WallsMatrix& walls_matrix = *walls_matrix_ptr;
-    std::string serialized = std::string();
+    auto serialize_wall = [](const bool& value) -> char {
+        return value ? SERIALIZED_WALL : SERIALIZED_SPACE;
+    };
+    
+    char box[SERIALIZED_WALL_SIZE][SERIALIZED_WALL_SIZE] = { NULL };
+    for (size_t y = 0; y < WALL_SIZE; ++y) {
+        for (size_t x = 0; x < WALL_SIZE; ++x) {
 
-    std::string array[WallSize + 2 + WallSize - 1][WallSize + 2 + WallSize - 1];
+            const auto& north = boxes.get(x, y).NORTH;
+            const auto& south = boxes.get(x, y).SOUTH;
+            const auto& west = boxes.get(x, y).WEST;
+            const auto& east = boxes.get(x, y).EAST;
 
-
-    for (int i = 0; i < (WallSize); ++i) {
-        for (int j = 0; j < (WallSize); ++j) {
+            // space
+            box[x * 2 + 1][y * 2 + 1] = SERIALIZED_SPACE;
 
             // walls
-            array[i * 2 + 1][j * 2 + 1] = "0";
-            array[i * 2][j * 2 + 1] = std::to_string(walls_matrix[wall_matrix_offset(i, j)].NORTH);
-            array[i * 2 + 2][j * 2 + 1] = std::to_string(walls_matrix[wall_matrix_offset(i, j)].SOUTH);
-            array[i * 2 + 1][j * 2] = std::to_string(walls_matrix[wall_matrix_offset(i, j)].WEST);
-            array[i * 2 + 1][j * 2 + 2] = std::to_string(walls_matrix[wall_matrix_offset(i, j)].EAST);
-
-            // corners
-            array[i * 2][j * 2] = "c";
-            array[i * 2 + 2][j * 2] = "c";
-            array[i * 2][j * 2 + 2] = "c";
-            array[i * 2 + 2][j * 2 + 2] = "c";
+            box[x * 2 + 1][y * 2] = serialize_wall(north);
+            box[x * 2 + 1][y * 2 + 2] = serialize_wall(south);
+            box[x * 2][y * 2 + 1] = serialize_wall(west);
+            box[x * 2 + 2][y * 2 + 1] = serialize_wall(east);
 
         } 
     }
 
-    
-    for (int i = 0; i < (WallSize + 2 + WallSize - 1); ++i) {
-        for (int j = 0; j < (WallSize + 2 + WallSize - 1); ++j) {
-            serialized += array[i][j];
-            serialized += ",";
+    //TODO: validate corners
+    /*
+            // corners
+            box[x * 2][y * 2] = serialize_wall(north || west);
+            box[x * 2][y * 2 + 2] = serialize_wall(south || west);
+            box[x * 2 + 2][y * 2] = serialize_wall(north || east);
+            box[x * 2 + 2][y * 2 + 2] = serialize_wall(south || east);
+    */
+
+    std::string serialized = std::string();
+    serialized.reserve(SERIALIZED_SIZE);
+    for (size_t y = 0; y < SERIALIZED_WALL_SIZE; ++y) {
+        for (size_t x = 0; x < SERIALIZED_WALL_SIZE; ++x) {
+            serialized.append(1, box[x][y]);
         }
-        serialized += "\n\r";
+        serialized.append("\n");
     }
+    assert(serialized.length() == SERIALIZED_SIZE);
 
     return serialized;
 }
 
 MazeSimulator MazeSimulator::parse(const std::string& input)
 {
-    WallsMatrixPtr walls_matrix_ptr(new WallsMatrix);
-    WallsMatrix& walls_matrix = *walls_matrix_ptr;
+    assert(input.length() == SERIALIZED_SIZE);
 
-    // read file to array 
-    std::ifstream file(input);
-    if (!file.is_open()) {
-        throw std::runtime_error("cannot open file");
-    }
+    auto parse_wall = [&](const char& wall) -> bool {
+        if (wall == SERIALIZED_WALL)
+            return true;
+        if (wall == SERIALIZED_SPACE)
+            return false;
 
+        throw std::runtime_error("invalid character found for ");
+    };
+    auto serialized_get = [&](const std::string& input, const size_t& x, const size_t& y) -> char {
+        assert(x >= 0 && x < SERIALIZED_WALL_SIZE);
+        assert(y >= 0 && y < SERIALIZED_WALL_SIZE);
 
-    std::string str;
-    auto row_index = 0;
+        const size_t offset = y * (SERIALIZED_WALL_SIZE + 1) + x;
+        
+        return input[offset];
+     };
+    auto serialized_get_wall = [&](const std::string& input, const size_t& x, const size_t& y) -> bool {
+        return parse_wall(serialized_get(input, x, y));
+    };
 
-    std::string array[WallSize + 2 + WallSize - 1][WallSize + 2 + WallSize - 1];
-    while (std::getline(file, str))
-    {
-        auto col_index = 0;
-        std::stringstream ss(str);
-        std::string element;
-        while (std::getline(ss, element, ',')) {
-            array[row_index][col_index] = element;
-            std::cout << element << " ";
-            col_index++;
+    Boxes boxes(Box{ false, false, false, false });
+
+    for (size_t y = 0; y < WALL_SIZE; ++y) {
+        for (size_t x = 0; x < WALL_SIZE; ++x) {
+            // space
+            assert(serialized_get(input, x * 2 + 1, y * 2 + 1) == SERIALIZED_SPACE);
+
+            // walls
+            const auto north = serialized_get_wall(input, x * 2 + 1, y * 2);
+            const auto south = serialized_get_wall(input, x * 2 + 1, y * 2 + 2);
+            const auto west = serialized_get_wall(input, x * 2, y * 2 + 1);
+            const auto east = serialized_get_wall(input, x * 2 + 2, y * 2 + 1);
+
+            // corners
+            // checked later
+
+            boxes.get(x, y) = Box{ north, south, west, east };
         }
-        row_index++;
-        std::cout << std::endl;
     }
 
+    // TODO: validate corners
+    /*
+            assert(serialized_get_wall(input, row * 2, col * 2) == north || west);
+            assert(serialized_get_wall(input, row * 2 + 2, col * 2) == south || west);
+            assert(serialized_get_wall(input, row * 2, col * 2 + 2) == north || east);
+            assert(serialized_get_wall(input, row * 2 + 2, col * 2 + 2) == south || east);
+    */
 
-    int i = 0;
-
-    for (int row_index = 0; row_index < (WallSize + 2 + WallSize - 1); ++row_index) {
-        int j = 0;
-        for (int col_index = 0; col_index < (WallSize + 2 + WallSize - 1); ++col_index) {              
-            if (row_index % 2 == 0 || col_index % 2 == 0) {
-                continue;
-            }
-
-            // sensors returning true when facing a wall (x)
-            bool north = (array[row_index - 1][col_index] == "1");
-            bool west = (array[row_index][col_index - 1] == "1");
-            bool east = (array[row_index][col_index + 1] == "1");
-            bool south = (array[row_index + 1][col_index] == "1");
-            
-            walls_matrix[wall_matrix_offset(i, j)] = Walls{ north, south , west, east };
-            
-            j++;
-        }
-        if (row_index % 2 == 1){
-            i += 1;
-        }        
-    }
-
-    return MazeSimulator(std::move(walls_matrix_ptr));
+    return MazeSimulator(std::move(boxes));
 }

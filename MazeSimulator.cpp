@@ -8,9 +8,49 @@
 MazeSimulator::MazeSimulator(Boxes&& boxes):
     boxes(std::move(boxes))
 {
-    // TODO: add validation
-    // - row + 1 north == row south etc
-    // - all borders around are set
+    //check if all borders are set (maze is closed)
+    for (size_t y = 0; y < WALL_SIZE; ++y) {
+        for (size_t x = 0; x < WALL_SIZE; ++x) {
+            if (y == 0) {
+                //top maze wall
+                assert(this->boxes.get(x, y).NORTH);
+                if (x == 0) {
+                    //left top corner
+                    assert(this->boxes.get(x, y).WEST);
+                }
+                else if (x == WALL_SIZE - 1) {
+                    //right top corner
+                    assert(this->boxes.get(x, y).EAST);
+                }
+            }
+            else if (y == WALL_SIZE - 1) {
+                //bottom maze wall
+                assert(this->boxes.get(x, y).SOUTH);
+                if (x == 0) {
+                    //left bottom corner
+                    assert(this->boxes.get(x, y).WEST);
+                }
+                else if (x == WALL_SIZE - 1) {
+                    //right bottom corner
+                    assert(this->boxes.get(x, y).EAST);
+                }
+            }
+            else if (x == 0) {
+                //left maze wall
+                assert(this->boxes.get(x, y).WEST);
+            }
+            else if (x == WALL_SIZE - 1) {
+                //right maze wall
+                assert(this->boxes.get(x, y).EAST);
+            }
+            else {
+                assert(this->boxes.get(x, y).NORTH == this->boxes.get(x, y - 1).SOUTH);
+                assert(this->boxes.get(x, y).SOUTH == this->boxes.get(x, y + 1).NORTH);
+                assert(this->boxes.get(x, y).WEST == this->boxes.get(x - 1, y).EAST);
+                assert(this->boxes.get(x, y).EAST == this->boxes.get(x + 1, y).WEST);
+            }
+        }
+    }
 }
 
 std::string MazeSimulator::serialize() const
@@ -93,7 +133,7 @@ std::string MazeSimulator::serialize() const
                 const auto& west = boxes.get(x_maze - 1, y_maze - 1).SOUTH;
                 const auto& east = boxes.get(x_maze, y_maze).NORTH;
 
-                maze[x][y] = serialize_wall((north + south + west + east) > 1);
+                maze[x][y] = serialize_wall((north + south + west + east) > 0);
             }
         }   
     }

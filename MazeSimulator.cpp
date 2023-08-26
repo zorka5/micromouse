@@ -195,13 +195,88 @@ MazeSimulator MazeSimulator::parse(const std::string& input)
         }
     }
 
-    // TODO: validate corners
-    /*
-            assert(serialized_get_wall(input, row * 2, col * 2) == north || west);
-            assert(serialized_get_wall(input, row * 2 + 2, col * 2) == south || west);
-            assert(serialized_get_wall(input, row * 2, col * 2 + 2) == north || east);
-            assert(serialized_get_wall(input, row * 2 + 2, col * 2 + 2) == south || east);
-    */
+
+    //validate corners
+
+    for (size_t y_corner = 0; y_corner < WALL_SIZE; y_corner += 2) {
+        for (size_t x_corner = 0; x_corner < WALL_SIZE; x_corner += 2) {
+            if (y_corner == 0) {
+                if (x_corner == 0) {
+                    //left top corner
+                    const auto east = serialized_get_wall(input, x_corner + 1, y_corner);
+                    const auto south = serialized_get_wall(input, x_corner, y_corner + 1);
+                    assert(serialized_get_wall(input, x_corner, y_corner) ==  east || south);
+                }
+                else if (x_corner == WALL_SIZE - 1) {
+                    //right top corner
+                    const auto west = serialized_get_wall(input, x_corner - 1, y_corner);
+                    const auto south = serialized_get_wall(input, x_corner, y_corner + 1);
+                    assert(serialized_get_wall(input, x_corner, y_corner) == west || south);
+                }
+                else {
+                    //top wall
+                    const auto east = serialized_get_wall(input, x_corner + 1, y_corner);
+                    const auto south = serialized_get_wall(input, x_corner, y_corner + 1);
+                    const auto west = serialized_get_wall(input, x_corner - 1, y_corner);
+
+                    assert(serialized_get_wall(input, x_corner, y_corner) == east || south || west);
+                }
+            }
+            else if (y_corner == WALL_SIZE - 1) {
+                if (x_corner == 0) {
+                    //left bottom corner
+                    const auto north = serialized_get_wall(input, x_corner, y_corner - 1);
+                    const auto east = serialized_get_wall(input, x_corner + 1, y_corner);
+                    assert(serialized_get_wall(input, x_corner, y_corner) == east || north);
+                    
+                }
+                else if (x_corner == WALL_SIZE - 1) {
+                    //right bottom corner
+                    const auto north = serialized_get_wall(input, x_corner, y_corner - 1);
+                    const auto west = serialized_get_wall(input, x_corner - 1, y_corner);
+                    assert(serialized_get_wall(input, x_corner, y_corner) == west || north);
+                    
+                }
+                else {
+                    //bottom maze wall
+                    const auto east = serialized_get_wall(input, x_corner + 1, y_corner);
+                    const auto north = serialized_get_wall(input, x_corner, y_corner - 1);
+                    const auto west = serialized_get_wall(input, x_corner - 1, y_corner);
+
+                    assert(serialized_get_wall(input, x_corner, y_corner) == east || north || west);
+                    
+                }
+            }
+            else if (x_corner == 0) {
+                //left maze wall
+                if (y_corner != 0 && y_corner != WALL_SIZE - 1) {
+                    const auto north = serialized_get_wall(input, x_corner, y_corner - 1);
+                    const auto east = serialized_get_wall(input, x_corner + 1, y_corner);
+                    const auto south = serialized_get_wall(input, x_corner, y_corner + 1);
+                    assert(serialized_get_wall(input, x_corner, y_corner) == north || east || south);
+                }
+
+            }
+            else if (x_corner == WALL_SIZE - 1) {
+                //right maze wall
+                if (y_corner != 0 && y_corner != WALL_SIZE - 1) {
+                    const auto north = serialized_get_wall(input, x_corner, y_corner - 1);
+                    const auto south = serialized_get_wall(input, x_corner, y_corner + 1);
+                    const auto west = serialized_get_wall(input, x_corner - 1, y_corner);
+                    assert(serialized_get_wall(input, x_corner, y_corner) == north || south || west);
+                }
+            }
+
+            else {
+                const auto north = serialized_get_wall(input, x_corner, y_corner - 1);
+                const auto east = serialized_get_wall(input, x_corner + 1, y_corner);
+                const auto south = serialized_get_wall(input, x_corner, y_corner + 1);
+                const auto west = serialized_get_wall(input, x_corner - 1, y_corner);
+
+                assert(serialized_get_wall(input, x_corner, y_corner) == north || east || south || west);
+            }
+        }
+    }
 
     return MazeSimulator(std::move(boxes));
 }

@@ -20,6 +20,9 @@ private:
 	MazeSimulator(Boxes&& boxes);
 
 public:
+	const Boxes& get_boxes() const;
+
+public:
 	static const char SERIALIZED_WALL = '#';
 	static const char SERIALIZED_SPACE = ' ';
 

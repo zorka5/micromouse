@@ -3,11 +3,12 @@
 #include <string>
 
 #include "Array2d.h"
+#include "Constants.h"
+#include "Coordinates2d.h"
 
 class MazeSimulator
 {
 private:
-	static const size_t WALL_SIZE = 16;
 
 	struct Box {
 		bool NORTH, SOUTH, WEST, EAST;

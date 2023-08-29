@@ -28,10 +28,12 @@ std::string MazeSimulator::serialize() const
     for (size_t y = 0; y < WALL_SIZE; ++y) {
         for (size_t x = 0; x < WALL_SIZE; ++x) {
 
-            const auto& north = boxes.get(x, y).NORTH;
-            const auto& south = boxes.get(x, y).SOUTH;
-            const auto& west = boxes.get(x, y).WEST;
-            const auto& east = boxes.get(x, y).EAST;
+            auto coord = Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y);
+
+            const auto& north = boxes.get(coord).NORTH;
+            const auto& south = boxes.get(coord).SOUTH;
+            const auto& west = boxes.get(coord).WEST;
+            const auto& east = boxes.get(coord).EAST;
 
             // space
             maze[x * 2 + 1][y * 2 + 1] = false;
@@ -61,8 +63,8 @@ std::string MazeSimulator::serialize() const
     for (size_t y = 0; y < WALL_SIZE - 1; ++y)
         for (size_t x = 0; x < WALL_SIZE - 1; ++x)
         {
-            const Box& us = boxes.get(x, y);
-            const Box& next = boxes.get(x + 1, y + 1);
+            const Box& us = boxes.get(Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y));
+            const Box& next = boxes.get(Coordinates2d<WALL_SIZE, WALL_SIZE>(x+1, y+1));
 
             maze[x * 2 + 2][y * 2 + 2] = us.EAST || us.SOUTH || next.NORTH || next.WEST;
         }
@@ -113,7 +115,7 @@ MazeSimulator MazeSimulator::parse(const std::string& input)
             // corners
             // checked later
 
-            boxes.get(x, y) = Box{ north, south, west, east };
+            boxes.get(Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y)) = Box{ north, south, west, east };
         }
     }
 
@@ -133,8 +135,8 @@ MazeSimulator MazeSimulator::parse(const std::string& input)
     for(size_t y = 0; y < WALL_SIZE - 1; ++y)
         for (size_t x = 0; x < WALL_SIZE - 1; ++x)
         {
-            const Box& us = boxes.get(x, y);
-            const Box& next = boxes.get(x + 1, y + 1);
+            const Box& us = boxes.get(Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y));
+            const Box& next = boxes.get(Coordinates2d<WALL_SIZE, WALL_SIZE>(x + 1, y + 1));
 
             const bool corner = maze[x * 2 + 2][y * 2 + 2];
             
@@ -146,18 +148,18 @@ MazeSimulator MazeSimulator::parse(const std::string& input)
     // - walls are consistent
     for (size_t y = 0; y < WALL_SIZE; ++y) {
         for (size_t x = 0; x < WALL_SIZE; ++x) {
-            const auto& box = boxes.get(x, y);
+            const auto& box = boxes.get(Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y));
             if (y == 0)
                 assert(box.NORTH);
             if (y > 0)
-                assert(boxes.get(x, y - 1).SOUTH == box.NORTH);
+                assert(boxes.get(Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y - 1)).SOUTH == box.NORTH);
             if (y == WALL_SIZE - 1)
                 assert(box.SOUTH);
 
             if (x == 0)
                 assert(box.WEST);
             if (x > 0)
-                assert(boxes.get(x - 1, y).EAST == box.WEST);
+                assert(boxes.get(Coordinates2d<WALL_SIZE, WALL_SIZE>(x - 1, y)).EAST == box.WEST);
             if (x == WALL_SIZE - 1)
                 assert(box.EAST);
         }

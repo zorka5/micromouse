@@ -39,7 +39,7 @@ int App::run()
 	}
 
 	// Create the display
-	display = al_create_display(640, 480);
+	display = al_create_display(WINDOW_WIDTH, WINDOW_HEIGHT);
 	if (!display) {
 		fprintf(stderr, "Failed to create display.\n");
 		return 1;
@@ -101,7 +101,7 @@ int App::run()
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			// Redraw
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			draw_maze_similator();
+			draw_maze_similator(Coordinates2d<WINDOW_WIDTH, WINDOW_HEIGHT>(50,50));
 			al_flip_display();
 			redraw = false;
 		}
@@ -114,16 +114,15 @@ int App::run()
 	return 0;
 }
 
-void App::draw_maze_similator()
+void App::draw_maze_similator(const Coordinates2d<WINDOW_WIDTH, WINDOW_HEIGHT>& start_point)
 {
-	std::cout << "Draw map" << std::endl;
-	const auto & boxes = maze_simulator.get_boxes();
+	const auto& boxes = maze_simulator.get_boxes();
 
-	size_t current_y = 0;
-	size_t current_x = 0;
+	size_t current_y = start_point.x;
+	
 	
 	for (size_t y = 0; y < WALL_SIZE; ++y) {
-		current_x = 0;
+		size_t current_x = start_point.y;
 		for (size_t x = 0; x < WALL_SIZE; ++x) {
 
 			const auto& coord = Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y);
@@ -133,7 +132,6 @@ void App::draw_maze_similator()
 			const auto& west = boxes.get(coord).WEST;
 			const auto& east = boxes.get(coord).EAST;
 
-			std::cout << north << south << west << east << std::endl;;
 
 			// draw west wall
 			if (west == true) {
@@ -153,7 +151,6 @@ void App::draw_maze_similator()
 
 			//draw eastern wall
 			if (east == true) {
-				
 				al_draw_filled_rectangle(current_x + MAZE_WALL_SIZE + MAZE_CELL_SIZE, current_y + MAZE_WALL_SIZE, current_x + 2*MAZE_WALL_SIZE + MAZE_CELL_SIZE, current_y + MAZE_WALL_SIZE + MAZE_CELL_SIZE, WALL_COLOR);
 			}
 			else {
@@ -187,16 +184,12 @@ void App::draw_maze_similator()
 			if (west || south) {
 				al_draw_filled_rectangle(current_x, current_y + MAZE_WALL_SIZE + MAZE_CELL_SIZE, current_x + MAZE_WALL_SIZE, current_y + 2 * MAZE_WALL_SIZE + MAZE_CELL_SIZE, WALL_COLOR);
 			}
-
 			
 			//draw cell
 			al_draw_filled_rectangle(current_x + MAZE_WALL_SIZE, current_y + MAZE_WALL_SIZE, current_x + MAZE_CELL_SIZE + MAZE_WALL_SIZE, current_y + MAZE_CELL_SIZE + MAZE_WALL_SIZE, CELL_COLOR);
-			
 
 			current_x += MAZE_CELL_SIZE + MAZE_WALL_SIZE;
 		}
 		current_y += MAZE_CELL_SIZE + MAZE_WALL_SIZE;
 	}
-
-	//al_draw_bitmap_region(maze_simulator_bitmap, sx, sy, sw, sh, dx, dy, 1);
 }

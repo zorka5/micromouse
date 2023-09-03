@@ -7,6 +7,8 @@
 #include "../MazeDiscovery.h"
 #include "../Constants.h"
 #include "../utils/Coordinates2d.h"
+#include "../Mouse.h"
+#include "../Discover.h"
 
 namespace gui {
 	

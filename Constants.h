@@ -1,3 +1,3 @@
 #pragma once
 
-static const size_t WALL_SIZE = 16;
+static const size_t MAZE_WALL_SIZE = 16;

@@ -6,6 +6,7 @@
 #include "../MazeSimulator.h"
 #include "../MazeDiscovery.h"
 #include "../Constants.h"
+#include "../utils/Coordinates2d.h"
 
 namespace gui {
 	
@@ -15,7 +16,7 @@ namespace gui {
 		static const size_t WINDOW_WIDTH = 1000;
 		static const size_t WINDOW_HEIGHT = 500;
 
-		using Coord = Coordinates2d<WINDOW_WIDTH, WINDOW_HEIGHT>;
+		using WindowCoordinates = utils::Coordinates2d<WINDOW_WIDTH, WINDOW_HEIGHT>;
 
 		static const size_t TICKRATE = 5;
 

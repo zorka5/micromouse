@@ -21,9 +21,9 @@ std::string MazeSimulator::serialize() const
 	bool maze[SERIALIZED_WALL_SIZE][SERIALIZED_WALL_SIZE] = { false };
 
 	// inner wall
-	for (size_t y = 0; y < WALL_SIZE; ++y) {
-		for (size_t x = 0; x < WALL_SIZE; ++x) {
-			const auto& box = boxes.get(Coord(x, y));
+	for (size_t y = 0; y < MAZE_WALL_SIZE; ++y) {
+		for (size_t x = 0; x < MAZE_WALL_SIZE; ++x) {
+			const auto& box = boxes.get(MazeCoordinates(x, y));
 
 			// space
 			maze[x * 2 + 1][y * 2 + 1] = false;
@@ -50,11 +50,11 @@ std::string MazeSimulator::serialize() const
 	}
 
 	// inner corners
-	for (size_t y = 0; y < WALL_SIZE - 1; ++y)
-		for (size_t x = 0; x < WALL_SIZE - 1; ++x)
+	for (size_t y = 0; y < MAZE_WALL_SIZE - 1; ++y)
+		for (size_t x = 0; x < MAZE_WALL_SIZE - 1; ++x)
 		{
-			const Box& us = boxes.get(Coord(x, y));
-			const Box& next = boxes.get(Coord(x + 1, y + 1));
+			const Box& us = boxes.get(MazeCoordinates(x, y));
+			const Box& next = boxes.get(MazeCoordinates(x + 1, y + 1));
 
 			maze[x * 2 + 2][y * 2 + 2] = us.EAST || us.SOUTH || next.NORTH || next.WEST;
 		}
@@ -89,10 +89,10 @@ MazeSimulator MazeSimulator::parse(const std::string& input)
 		for (size_t x = 0; x < SERIALIZED_WALL_SIZE; ++x)
 			maze[x][y] = parse_wall(input[y * (SERIALIZED_WALL_SIZE + 1) + x]);
 
-	Boxes boxes(Box{ false, false, false, false });
+	Boxes boxes(Box(false, false, false, false));
 
-	for (size_t y = 0; y < WALL_SIZE; ++y) {
-		for (size_t x = 0; x < WALL_SIZE; ++x) {
+	for (size_t y = 0; y < MAZE_WALL_SIZE; ++y) {
+		for (size_t x = 0; x < MAZE_WALL_SIZE; ++x) {
 			// space
 			assert(!maze[x * 2 + 1][y * 2 + 1]);
 
@@ -105,7 +105,7 @@ MazeSimulator MazeSimulator::parse(const std::string& input)
 			// corners
 			// checked later
 
-			boxes.get(Coord(x, y)) = Box{ north, south, west, east };
+			boxes.get(MazeCoordinates(x, y)) = Box(north, south, west, east);
 		}
 	}
 
@@ -122,11 +122,11 @@ MazeSimulator MazeSimulator::parse(const std::string& input)
 	}
 
 	// validate inner corners (bottom left from us)
-	for (size_t y = 0; y < WALL_SIZE - 1; ++y)
-		for (size_t x = 0; x < WALL_SIZE - 1; ++x)
+	for (size_t y = 0; y < MAZE_WALL_SIZE - 1; ++y)
+		for (size_t x = 0; x < MAZE_WALL_SIZE - 1; ++x)
 		{
-			const Box& us = boxes.get(Coord(x, y));
-			const Box& next = boxes.get(Coord(x + 1, y + 1));
+			const Box& us = boxes.get(MazeCoordinates(x, y));
+			const Box& next = boxes.get(MazeCoordinates(x + 1, y + 1));
 
 			const bool corner = maze[x * 2 + 2][y * 2 + 2];
 
@@ -136,21 +136,21 @@ MazeSimulator MazeSimulator::parse(const std::string& input)
 	// validate:
 	// - box is closed
 	// - walls are consistent
-	for (size_t y = 0; y < WALL_SIZE; ++y) {
-		for (size_t x = 0; x < WALL_SIZE; ++x) {
-			const auto& box = boxes.get(Coord(x, y));
+	for (size_t y = 0; y < MAZE_WALL_SIZE; ++y) {
+		for (size_t x = 0; x < MAZE_WALL_SIZE; ++x) {
+			const auto& box = boxes.get(MazeCoordinates(x, y));
 			if (y == 0)
 				assert(box.NORTH);
 			if (y > 0)
-				assert(boxes.get(Coord(x, y - 1)).SOUTH == box.NORTH);
-			if (y == WALL_SIZE - 1)
+				assert(boxes.get(MazeCoordinates(x, y - 1)).SOUTH == box.NORTH);
+			if (y == MAZE_WALL_SIZE - 1)
 				assert(box.SOUTH);
 
 			if (x == 0)
 				assert(box.WEST);
 			if (x > 0)
-				assert(boxes.get(Coord(x - 1, y)).EAST == box.WEST);
-			if (x == WALL_SIZE - 1)
+				assert(boxes.get(MazeCoordinates(x - 1, y)).EAST == box.WEST);
+			if (x == MAZE_WALL_SIZE - 1)
 				assert(box.EAST);
 		}
 	}

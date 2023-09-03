@@ -12,9 +12,13 @@ const MazeDiscovery::Boxes& MazeDiscovery::get_boxes() const
 }
 
 
-void MazeDiscovery::add_box(const Coord& coord, Box&& box)
+bool MazeDiscovery::has_box(const MazeCoordinates& maze_coordinates) const
 {
-	auto & current = boxes.get(coord);
+	return boxes.get(maze_coordinates).has_value();
+}
+void MazeDiscovery::add_box(const MazeCoordinates& maze_coordinates, Box&& box)
+{
+	auto& current = boxes.get(maze_coordinates);
 	assert(!current);
 	current.emplace(std::move(box));
 }

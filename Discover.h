@@ -1,29 +1,35 @@
 #pragma once
 
-#include "MazeDiscovery.h"
-#include "MazeSimulator.h"
-#include "Mouse.h"
+#include <stack>
+#include <unordered_set>
+#include <optional>
 
+#include "Maze.h"
+#include "Mouse.h"
 
 class Discover
 {
 private:
-	const MazeSimulator& maze_simulator;
-	
 	Mouse& mouse;
-	MazeDiscovery& maze_discovery;
+	std::stack<std::pair<
+		MazeCoordinates, // position before move
+		Direction // direction of the move
+	>> path;
+	std::unordered_multiset<MazeCoordinates> visited;
+	// std::optional<MazeCoordinates> end;
 
 public:
-	Discover(
-		const MazeSimulator& maze_simulator,
-		Mouse& mouse,
-		MazeDiscovery& maze_discovery
-	);
-
-private:
-	// std::unordered_set<Coords2d> visisted;
+	Discover(Mouse& mouse);
 
 public:
 	bool think();
+
+private:
+	std::optional<Direction> random_direction(const Box& allowed);
+
+public:
+	//get path
+	//get visited
+	//get position -> mouse
 };
 

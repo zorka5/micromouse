@@ -1,17 +1,33 @@
 #pragma once
 
+#include "Box.h"
+#include "Direction.h"
+#include "Maze.h"
 #include "MazeDiscovery.h"
 #include "MazeSimulator.h"
 
-class Mouse
-{
+class Mouse {
 private:
-	size_t x, y;
+	const MazeSimulator& maze_simulator;
+	MazeDiscovery& maze_discovery;
+
+private:
+	MazeCoordinates position;
 
 public:
-	Mouse(const size_t& x, const size_t& y);
+	Mouse(
+		const MazeSimulator& maze_simulator,
+		MazeDiscovery& maze_discovery,
+		const MazeCoordinates& position
+	);
 
 public:
-	void move(const size_t& x, const size_t& y);
+	const MazeCoordinates& get_position() const;
+
+public:
+	const Box& get_walls() const;
+	void move(const Direction& direction);
+
+private:
+	void discover_position();
 };
-

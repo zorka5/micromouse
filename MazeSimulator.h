@@ -2,21 +2,14 @@
 
 #include <string>
 
-#include "Array2d.h"
-#include "Coordinates2d.h"
+#include "Box.h"
 #include "Constants.h"
+#include "Maze.h"
 
 class MazeSimulator
 {
-public:
-	using Coord = Coordinates2d<WALL_SIZE, WALL_SIZE>;
-
 private:
-	struct Box {
-		bool NORTH, SOUTH, WEST, EAST;
-	};
-	
-	using Boxes = Array2d<Box, WALL_SIZE, WALL_SIZE>;
+	using Boxes = MazeArray<Box>;
 	Boxes boxes;
 
 private:
@@ -29,7 +22,7 @@ public:
 	static const char SERIALIZED_WALL = '#';
 	static const char SERIALIZED_SPACE = ' ';
 
-	static const size_t SERIALIZED_WALL_SIZE = WALL_SIZE + 2 + WALL_SIZE - 1;
+	static const size_t SERIALIZED_WALL_SIZE = MAZE_WALL_SIZE + 2 + MAZE_WALL_SIZE - 1;
 	static const size_t SERIALIZED_SIZE = (SERIALIZED_WALL_SIZE + 1) * SERIALIZED_WALL_SIZE;
 
 	std::string serialize() const;

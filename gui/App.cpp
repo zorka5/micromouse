@@ -12,8 +12,8 @@ namespace gui {
 	const ALLEGRO_COLOR UNDISCOVERED_CELL_COLOR = al_map_rgb(102, 102, 102);
 	const ALLEGRO_COLOR UNDISCOVERED_WALL_COLOR = al_map_rgb(51, 51, 51);
 
-	const size_t MAZE_CELL_SIZE = 20;
-	const size_t MAZE_WALL_SIZE = 4;
+	const size_t MAZE_CELL_SIZE = 10;
+	const size_t MAZE_WALL_SIZE = 2;
 
 
 	App::App(const MazeSimulator& maze_simulator, const MazeDiscovery& maze_discovery) :
@@ -122,8 +122,8 @@ namespace gui {
 
 				al_draw_filled_rectangle(
 					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
-					X_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
-					Y_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
+					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
 					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
 					CELL_COLOR
 				);
@@ -237,6 +237,129 @@ namespace gui {
 
 	void App::draw_maze_discovery()
 	{
+		const size_t X_OFFSET = 400;
+		const size_t Y_OFFSET = 50;
+
+		const auto& boxes = maze_simulator.get_boxes();
+
+		// inner + left + north walls + background
+		for (size_t y = 0; y < WALL_SIZE; ++y) {
+			for (size_t x = 0; x < WALL_SIZE; ++x) {
+				const Coordinates2d<WALL_SIZE, WALL_SIZE>& coord = Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y);
+				const auto& box = maze_simulator.get_boxes().get(coord);
+
+				al_draw_filled_rectangle(
+					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
+					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
+					CELL_COLOR
+				);
+
+				// draw west wall
+				al_draw_filled_rectangle(
+					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
+					box.WEST ? WALL_COLOR : CELL_COLOR
+				);
+
+				// draw north wall
+				al_draw_filled_rectangle(
+					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
+					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+					box.NORTH ? WALL_COLOR : CELL_COLOR
+				);
+
+				// inner corners
+				for (size_t y = 0; y < WALL_SIZE - 1; ++y) {
+					for (size_t x = 0; x < WALL_SIZE - 1; ++x) {
+						const auto& us = boxes.get(MazeSimulator::Coord(x, y));
+						const auto& next = boxes.get(MazeSimulator::Coord(x + 1, y + 1));
+
+						const bool corner = us.EAST || us.SOUTH || next.NORTH || next.WEST;
+
+						al_draw_filled_rectangle(
+							X_OFFSET + (x + 1) * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+							Y_OFFSET + (y + 1) * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+							X_OFFSET + (x + 1) * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+							Y_OFFSET + (y + 1) * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+							corner ? WALL_COLOR : CELL_COLOR
+						);
+					}
+				}
+
+				// right + bottom border
+				for (size_t y = 0; y < WALL_SIZE; ++y) {
+					const auto& box = boxes.get(MazeSimulator::Coord(WALL_SIZE - 1, y));
+
+					// east wall
+					al_draw_filled_rectangle(
+						X_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						X_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
+						box.EAST ? WALL_COLOR : CELL_COLOR
+					);
+				}
+				for (size_t x = 0; x < WALL_SIZE; ++x) {
+					const auto& box = boxes.get(MazeSimulator::Coord(x, WALL_SIZE - 1));
+
+					al_draw_filled_rectangle(
+						X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						Y_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
+						Y_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						box.SOUTH ? WALL_COLOR : CELL_COLOR
+					);
+				}
+
+				// outer corners
+				for (size_t x = 0; x < WALL_SIZE + 1; ++x)
+				{
+					// north
+					al_draw_filled_rectangle(
+						X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						Y_OFFSET + 0 * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						Y_OFFSET + 0 * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						WALL_COLOR
+					);
+
+					// south
+					al_draw_filled_rectangle(
+						X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						Y_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						Y_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						WALL_COLOR
+					);
+				}
+				for (size_t y = 1; y < WALL_SIZE; ++y)
+				{
+					// west
+					al_draw_filled_rectangle(
+						X_OFFSET + 0 * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						X_OFFSET + 0 * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						WALL_COLOR
+					);
+
+					// east
+					al_draw_filled_rectangle(
+						X_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
+						X_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
+						WALL_COLOR
+					);
+				}
+			}
+		}
 		/*
 		const auto& boxes = maze_discovery.get_boxes();
 

@@ -3,13 +3,15 @@
 #include <string>
 
 #include "Array2d.h"
-#include "Constants.h"
 #include "Coordinates2d.h"
+#include "Constants.h"
 
 class MazeSimulator
 {
-private:
+public:
+	using Coord = Coordinates2d<WALL_SIZE, WALL_SIZE>;
 
+private:
 	struct Box {
 		bool NORTH, SOUTH, WEST, EAST;
 	};

@@ -3,12 +3,15 @@
 #include <optional>
 
 #include "Array2d.h"
+#include "Coordinates2d.h"
+#include "Constants.h"
 
 class MazeDiscovery
 {
-private:
-	static const size_t WALL_SIZE = 16;
+public:
+	using Coord = Coordinates2d<WALL_SIZE, WALL_SIZE>;
 
+private:
 	struct Box {
 		bool NORTH, SOUTH, WEST, EAST;
 	};
@@ -23,6 +26,6 @@ public:
 	const Boxes& get_boxes() const;
 
 public:
-	void add_box(const size_t& x, const size_t& y, Box&& box);
+	void add_box(const Coord& coord, Box&& box);
 };
 

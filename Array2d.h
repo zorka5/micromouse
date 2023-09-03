@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <cassert>
 
 #include "Coordinates2d.h"
 

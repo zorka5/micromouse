@@ -12,8 +12,8 @@ namespace gui {
 	const ALLEGRO_COLOR UNDISCOVERED_CELL_COLOR = al_map_rgb(102, 102, 102);
 	const ALLEGRO_COLOR UNDISCOVERED_WALL_COLOR = al_map_rgb(51, 51, 51);
 
-	const size_t MAZE_CELL_SIZE = 10;
-	const size_t MAZE_WALL_SIZE = 2;
+	const size_t MAZE_CELL_SIZE = 20;
+	const size_t MAZE_WALL_SIZE = 4;
 
 
 	App::App(const MazeSimulator& maze_simulator, const MazeDiscovery& maze_discovery) :
@@ -237,43 +237,43 @@ namespace gui {
 
 	void App::draw_maze_discovery()
 	{
-		const size_t X_OFFSET = 400;
+		const size_t X_OFFSET = 500;
 		const size_t Y_OFFSET = 50;
 
-		const auto& boxes = maze_simulator.get_boxes();
+		const auto& boxes = maze_discovery.get_boxes();
 
 		// inner + left + north walls + background
 		for (size_t y = 0; y < WALL_SIZE; ++y) {
 			for (size_t x = 0; x < WALL_SIZE; ++x) {
 				const Coordinates2d<WALL_SIZE, WALL_SIZE>& coord = Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y);
-				const auto& box = maze_simulator.get_boxes().get(coord);
+				const auto& box = maze_discovery.get_boxes().get(coord);
 
 				al_draw_filled_rectangle(
 					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
 					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
-					CELL_COLOR
+					(box)? CELL_COLOR : UNDISCOVERED_CELL_COLOR
 				);
-
+				
 				// draw west wall
 				al_draw_filled_rectangle(
 					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
 					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
-					box.WEST ? WALL_COLOR : CELL_COLOR
+					(box.has_value()) ? (box.value().WEST ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
 				);
-
+				
 				// draw north wall
 				al_draw_filled_rectangle(
 					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
 					X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
 					Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
-					box.NORTH ? WALL_COLOR : CELL_COLOR
+					(box.has_value()) ? (box.value().NORTH ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
 				);
-
+				/*
 				// inner corners
 				for (size_t y = 0; y < WALL_SIZE - 1; ++y) {
 					for (size_t x = 0; x < WALL_SIZE - 1; ++x) {
@@ -291,10 +291,11 @@ namespace gui {
 						);
 					}
 				}
+				*/
 
 				// right + bottom border
 				for (size_t y = 0; y < WALL_SIZE; ++y) {
-					const auto& box = boxes.get(MazeSimulator::Coord(WALL_SIZE - 1, y));
+					const auto& box = boxes.get(MazeDiscovery::Coord(WALL_SIZE - 1, y));
 
 					// east wall
 					al_draw_filled_rectangle(
@@ -302,7 +303,7 @@ namespace gui {
 						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 						X_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
-						box.EAST ? WALL_COLOR : CELL_COLOR
+						(box.has_value()) ? (box.value().EAST ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
 					);
 				}
 				for (size_t x = 0; x < WALL_SIZE; ++x) {
@@ -313,9 +314,10 @@ namespace gui {
 						Y_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
 						X_OFFSET + x * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE + MAZE_CELL_SIZE,
 						Y_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
-						box.SOUTH ? WALL_COLOR : CELL_COLOR
+						(box.has_value()) ? (box.value().SOUTH ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
 					);
 				}
+				/*
 
 				// outer corners
 				for (size_t x = 0; x < WALL_SIZE + 1; ++x)
@@ -338,6 +340,7 @@ namespace gui {
 						WALL_COLOR
 					);
 				}
+				*/
 				for (size_t y = 1; y < WALL_SIZE; ++y)
 				{
 					// west
@@ -346,7 +349,7 @@ namespace gui {
 						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
 						X_OFFSET + 0 * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
-						WALL_COLOR
+						(box) ? WALL_COLOR : UNDISCOVERED_WALL_COLOR
 					);
 
 					// east
@@ -355,30 +358,13 @@ namespace gui {
 						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE),
 						X_OFFSET + WALL_SIZE * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
 						Y_OFFSET + y * (MAZE_CELL_SIZE + MAZE_WALL_SIZE) + MAZE_WALL_SIZE,
-						WALL_COLOR
+						(box) ? WALL_COLOR : UNDISCOVERED_WALL_COLOR
 					);
 				}
+				
+
+				
 			}
 		}
-		/*
-		const auto& boxes = maze_discovery.get_boxes();
-
-		size_t current_y = 200;
-
-		for (size_t y = 0; y < WALL_SIZE; ++y) {
-			size_t current_x = 200;
-			for (size_t x = 0; x < WALL_SIZE; ++x) {
-				const auto& coord = Coordinates2d<WALL_SIZE, WALL_SIZE>(x, y);
-
-				const auto& box = boxes.get(coord);
-				if (!box) {
-					// std::cout << "null" << std::endl;
-				}
-
-				current_x += MAZE_CELL_SIZE + MAZE_WALL_SIZE;
-			}
-			current_y += MAZE_CELL_SIZE + MAZE_WALL_SIZE;
-		}
-		*/
 	}
 }

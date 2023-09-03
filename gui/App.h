@@ -1,31 +1,43 @@
 #pragma once
 
-#include "../MazeSimulator.h"
-#include "../Constants.h"
-
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "../MazeSimulator.h"
+#include "../MazeDiscovery.h"
+#include "../Constants.h"
 
-class App
-{
-private:
-	const MazeSimulator& maze_simulator;
+namespace gui {
+	
+	class App
+	{
+	private:
+		static const size_t WINDOW_WIDTH = 1000;
+		static const size_t WINDOW_HEIGHT = 500;
 
-public:
-	App(const MazeSimulator & maze_simulator);
+		using Coord = Coordinates2d<WINDOW_WIDTH, WINDOW_HEIGHT>;
 
-private:
-	size_t MAZE_WALL_SIZE = 5;
-	size_t MAZE_CELL_SIZE = 15;
-	ALLEGRO_COLOR CELL_COLOR = al_map_rgb(255,255,255);
-	ALLEGRO_COLOR WALL_COLOR = al_map_rgb(0, 0, 200);
-	static const size_t WINDOW_WIDTH = 1000;
-	static const size_t WINDOW_HEIGHT = 500;
+		static const size_t TICKRATE = 5;
 
-public:
-	int run();
-private:
-	void draw_maze_similator(const Coordinates2d<WINDOW_WIDTH, WINDOW_HEIGHT>& start_point);
-};
+	private:
+		const MazeSimulator& maze_simulator;
+		const MazeDiscovery& maze_discovery;
 
+	public:
+		App(const MazeSimulator& maze_simulator, const MazeDiscovery& maze_discovery);
+
+
+	public:
+		void run();
+
+	private:
+		bool tick();
+
+	private:
+		void draw();
+
+		void draw_maze_simulator();
+		void draw_maze_discovery();
+	};
+
+}

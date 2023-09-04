@@ -4,6 +4,7 @@
 #include "../scope_guard/scope_guard.hpp"
 
 #include "../Constants.h"
+#include <stdexcept>
 
 
 namespace gui {
@@ -12,6 +13,7 @@ namespace gui {
 	const ALLEGRO_COLOR WALL_COLOR = al_map_rgb(0, 0, 200);
 	const ALLEGRO_COLOR UNDISCOVERED_CELL_COLOR = al_map_rgb(102, 102, 102);
 	const ALLEGRO_COLOR UNDISCOVERED_WALL_COLOR = al_map_rgb(51, 51, 51);
+	const ALLEGRO_COLOR PATH_COLOR = al_map_rgb(0,150,0);
 
 	const size_t MAZE_SIMULATOR_X_OFFSET = 50;
 	const size_t MAZE_SIMULATOR_Y_OFFSET = 50;
@@ -128,8 +130,9 @@ namespace gui {
 
 			draw_maze_discovery();
 			//draw_visited_count();
+			draw_path();
 			draw_mouse();
-			al_flip_display();
+			al_flip_display();		
 
 
 			const auto position = mouse.get_position();
@@ -139,8 +142,9 @@ namespace gui {
 			++counter;
 
 			std::cout << counter << " " << position << " -> " << position_next << std::endl;
-			//std::cin.get();
+			std::cin.get();
 			
+
 			if (exit)
 				break;
 		}
@@ -439,4 +443,52 @@ namespace gui {
 		}
 	}
 
+
+	void App::draw_path() {
+		auto path = discovery.get_path();
+		
+		while (!path.empty()) {
+			const auto top_ = path.top();
+			path.pop();
+			const auto& [position_before, direction] = top_;
+
+			std::cout << "Before: " << position_before;
+
+			auto start_coords = position_before;
+			auto end_coords = MazeCoordinates(start_coords.x(), start_coords.y());
+
+			switch (direction) {
+			case Direction::NORTH:
+				std::cout << "NORTH" << std::endl;
+				end_coords = MazeCoordinates(start_coords.x(), start_coords.y() - 1);
+				break;
+			case Direction::WEST:
+				std::cout << "WEST" << std::endl;
+				end_coords = MazeCoordinates(start_coords.x() - 1, start_coords.y());
+				break;
+			case Direction::SOUTH:
+				std::cout << "SOUTH" << std::endl;
+				end_coords = MazeCoordinates(start_coords.x(), start_coords.y() + 1);
+				break;
+			case Direction::EAST:
+				std::cout << "EAST" << std::endl;
+				end_coords = MazeCoordinates(start_coords.x() + 1, start_coords.y());
+				break;
+			default:
+				throw std::runtime_error("unknown direction");
+				break;
+			}
+
+			al_draw_line(
+				MAZE_DISCOVERY_X_OFFSET + start_coords.x() * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH / 2,
+				MAZE_DISCOVERY_Y_OFFSET + start_coords.y() * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH / 2,
+				MAZE_DISCOVERY_X_OFFSET + end_coords.x() * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH / 2,
+				MAZE_DISCOVERY_Y_OFFSET + end_coords.y() * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH / 2,
+				PATH_COLOR,
+				2
+			);
+		}
+		
+		
+	}
 }

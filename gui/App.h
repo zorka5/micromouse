@@ -11,6 +11,7 @@
 #include "../utils/Coordinates2d.h"
 #include "../Mouse.h"
 #include "../Discover.h"
+#include "../Direction.h"
 
 namespace gui {
 	
@@ -47,6 +48,7 @@ namespace gui {
 		void draw_maze_discovery();
 		void draw_mouse();
 		void draw_visited_count();
+		void draw_path();
 	};
 
 }

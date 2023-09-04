@@ -24,10 +24,12 @@ namespace gui {
 
 	private:
 		const MazeSimulator& maze_simulator;
-		const MazeDiscovery& maze_discovery;
+		MazeDiscovery& maze_discovery;
+		Mouse& mouse;
+		Discover discovery;
 
 	public:
-		App(const MazeSimulator& maze_simulator, const MazeDiscovery& maze_discovery);
+		App(const MazeSimulator& maze_simulator, MazeDiscovery& maze_discovery, Mouse& mouse, Discover& discovery);
 
 
 	public:
@@ -41,6 +43,7 @@ namespace gui {
 
 		void draw_maze_simulator();
 		void draw_maze_discovery();
+		void draw_mouse();
 	};
 
 }

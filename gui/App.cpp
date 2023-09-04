@@ -173,6 +173,15 @@ namespace gui {
 					CELL_COLOR
 				);
 
+				// draw north wall
+				al_draw_filled_rectangle(
+					MAZE_SIMULATOR_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
+					MAZE_SIMULATOR_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
+					MAZE_SIMULATOR_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
+					MAZE_SIMULATOR_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
+					box.NORTH ? WALL_COLOR : CELL_COLOR
+				);
+
 				// draw west wall
 				al_draw_filled_rectangle(
 					MAZE_SIMULATOR_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
@@ -182,14 +191,7 @@ namespace gui {
 					box.WEST ? WALL_COLOR : CELL_COLOR
 				);
 
-				// draw north wall
-				al_draw_filled_rectangle(
-					MAZE_SIMULATOR_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-					MAZE_SIMULATOR_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-					MAZE_SIMULATOR_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
-					MAZE_SIMULATOR_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-					box.NORTH ? WALL_COLOR : CELL_COLOR
-				);
+				
 
 				// inner corners
 				for (size_t y = 0; y < MAZE_WALL_SIZE - 1; ++y) {
@@ -301,7 +303,7 @@ namespace gui {
 				
 				// draw west wall
 				al_draw_filled_rectangle(
-					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
+					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH/2,
 					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
 					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
 					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
@@ -311,10 +313,28 @@ namespace gui {
 				// draw north wall
 				al_draw_filled_rectangle(
 					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
+					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH / 2,
 					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
 					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
 					(box.has_value()) ? (box.value().NORTH ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
+				);
+
+				// draw east wall
+				al_draw_filled_rectangle(
+					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
+					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
+					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH + MAZE_WALL_WIDTH / 2,
+					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
+					(box.has_value()) ? (box.value().EAST ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
+				);
+
+				// draw south wall
+				al_draw_filled_rectangle(
+					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
+					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
+					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
+					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH + MAZE_WALL_WIDTH / 2,
+					(box.has_value()) ? (box.value().SOUTH ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
 				);
 				/*
 				// inner corners
@@ -443,7 +463,6 @@ namespace gui {
 		}
 	}
 
-
 	void App::draw_path() {
 		auto path = discovery.get_path();
 		
@@ -452,26 +471,26 @@ namespace gui {
 			path.pop();
 			const auto& [position_before, direction] = top_;
 
-			std::cout << "Before: " << position_before;
+			//std::cout << "Before: " << position_before;
 
 			auto start_coords = position_before;
 			auto end_coords = MazeCoordinates(start_coords.x(), start_coords.y());
 
 			switch (direction) {
 			case Direction::NORTH:
-				std::cout << "NORTH" << std::endl;
+				//std::cout << "NORTH" << std::endl;
 				end_coords = MazeCoordinates(start_coords.x(), start_coords.y() - 1);
 				break;
 			case Direction::WEST:
-				std::cout << "WEST" << std::endl;
+				//std::cout << "WEST" << std::endl;
 				end_coords = MazeCoordinates(start_coords.x() - 1, start_coords.y());
 				break;
 			case Direction::SOUTH:
-				std::cout << "SOUTH" << std::endl;
+				//std::cout << "SOUTH" << std::endl;
 				end_coords = MazeCoordinates(start_coords.x(), start_coords.y() + 1);
 				break;
 			case Direction::EAST:
-				std::cout << "EAST" << std::endl;
+				//std::cout << "EAST" << std::endl;
 				end_coords = MazeCoordinates(start_coords.x() + 1, start_coords.y());
 				break;
 			default:

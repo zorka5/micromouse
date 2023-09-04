@@ -2,6 +2,8 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 #include "../MazeSimulator.h"
 #include "../MazeDiscovery.h"
@@ -44,6 +46,7 @@ namespace gui {
 		void draw_maze_simulator();
 		void draw_maze_discovery();
 		void draw_mouse();
+		void draw_visited_count();
 	};
 
 }

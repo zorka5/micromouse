@@ -58,6 +58,16 @@ namespace gui {
 			al_shutdown_primitives_addon();
 			});
 
+		assert(al_init_font_addon());
+		auto font_addon_guard = sg::make_scope_guard([&] {
+			al_shutdown_font_addon();
+			});
+
+		assert(al_init_ttf_addon());
+		auto ttf_addon_guard = sg::make_scope_guard([&] {
+			al_shutdown_ttf_addon();
+			});
+		
 		al_register_event_source(event_queue, al_get_display_event_source(display));
 		al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
@@ -117,6 +127,7 @@ namespace gui {
 			auto exit = false;
 
 			draw_maze_discovery();
+			//draw_visited_count();
 			draw_mouse();
 			al_flip_display();
 
@@ -128,8 +139,7 @@ namespace gui {
 			++counter;
 
 			std::cout << counter << " " << position << " -> " << position_next << std::endl;
-			std::cin.get();
-
+			//std::cin.get();
 			
 			if (exit)
 				break;
@@ -406,6 +416,27 @@ namespace gui {
 			MAZE_CELL_WIDTH / 2 - 2,
 			MOUSE_COLOR
 		);
+	}
+
+	void App::draw_visited_count() {
+
+		auto& visited = discovery.get_visited();
+
+		for (size_t y = 0; y < MAZE_WALL_SIZE; ++y) {
+			for (size_t x = 0; x < MAZE_WALL_SIZE; ++x) {
+				const MazeCoordinates& coord = MazeCoordinates(x, y);
+
+				const ALLEGRO_COLOR new_cell_color = al_map_rgb(0, CELL_COLOR.g - visited.count(coord) * 50, 0);
+				
+				al_draw_filled_rectangle(
+					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
+					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
+					MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
+					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
+					visited.count(coord) > 0 ? new_cell_color : UNDISCOVERED_CELL_COLOR
+				);
+			}
+		}
 	}
 
 }

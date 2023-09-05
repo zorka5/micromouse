@@ -10,12 +10,15 @@
 class Discover
 {
 private:
-	Mouse& mouse;
-	std::stack<std::pair<
+	using Stack = std::stack<std::pair<
 		MazeCoordinates, // position before move
 		Direction // direction of the move
-	>> path;
-	std::unordered_multiset<MazeCoordinates> visited;
+		>>;
+	using CoordsSet = std::unordered_multiset<MazeCoordinates>;
+private:
+	Mouse& mouse;
+	Stack path;
+	CoordsSet visited;
 	// std::optional<MazeCoordinates> end;
 
 public:
@@ -28,8 +31,7 @@ private:
 	std::optional<Direction> random_direction(const Box& allowed);
 
 public:
-	//get path
-	//get visited
-	//get position -> mouse
+	Stack& get_path();
+	CoordsSet& get_visited();
 };
 

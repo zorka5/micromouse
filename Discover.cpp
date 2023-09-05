@@ -113,3 +113,13 @@ std::optional<Direction> Discover::random_direction(const Box& allowed)
 	assert(value);
 	return value.value();
 }
+
+std::stack<std::pair<MazeCoordinates, Direction>>& Discover::get_path()
+{
+	return path;
+}
+
+std::unordered_multiset<MazeCoordinates>& Discover::get_visited()
+{
+	return visited;
+}

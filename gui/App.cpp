@@ -287,6 +287,7 @@ namespace gui {
 
 		const auto& boxes = maze_discovery.get_boxes();
 
+
 		// inner + left + north walls + background
 		for (size_t y = 0; y < MAZE_WALL_SIZE; ++y) {
 			for (size_t x = 0; x < MAZE_WALL_SIZE; ++x) {
@@ -336,96 +337,6 @@ namespace gui {
 					MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH + MAZE_WALL_WIDTH / 2,
 					(box.has_value()) ? (box.value().SOUTH ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
 				);
-				/*
-				// inner corners
-				for (size_t y = 0; y < WALL_SIZE - 1; ++y) {
-					for (size_t x = 0; x < WALL_SIZE - 1; ++x) {
-						const auto& us = boxes.get(MazeCoordinates(x, y));
-						const auto& next = boxes.get(MazeCoordinates(x + 1, y + 1));
-
-						const bool corner = us.any();
-
-						al_draw_filled_rectangle(
-							MAZE_DISCOVERY_X_OFFSET + (x + 1) * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-							MAZE_DISCOVERY_Y_OFFSET + (y + 1) * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-							MAZE_DISCOVERY_X_OFFSET + (x + 1) * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-							MAZE_DISCOVERY_Y_OFFSET + (y + 1) * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-							corner ? WALL_COLOR : CELL_COLOR
-						);
-					}
-				}
-				*/
-
-				// right + bottom border
-				for (size_t y = 0; y < MAZE_WALL_SIZE; ++y) {
-					const auto& box = boxes.get(MazeCoordinates(MAZE_WALL_SIZE - 1, y));
-
-					// east wall
-					al_draw_filled_rectangle(
-						MAZE_DISCOVERY_X_OFFSET + MAZE_WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						MAZE_DISCOVERY_X_OFFSET + MAZE_WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
-						(box.has_value()) ? (box.value().EAST ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
-					);
-				}
-				for (size_t x = 0; x < MAZE_WALL_SIZE; ++x) {
-					const auto& box = boxes.get(MazeCoordinates(x, MAZE_WALL_SIZE - 1));
-
-					al_draw_filled_rectangle(
-						MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						MAZE_DISCOVERY_Y_OFFSET + MAZE_WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH,
-						MAZE_DISCOVERY_Y_OFFSET + MAZE_WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						(box.has_value()) ? (box.value().SOUTH ? WALL_COLOR : CELL_COLOR) : UNDISCOVERED_WALL_COLOR
-					);
-				}
-				/*
-
-				// outer corners
-				for (size_t x = 0; x < WALL_SIZE + 1; ++x)
-				{
-					// north
-					al_draw_filled_rectangle(
-						MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_Y_OFFSET + 0 * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						MAZE_DISCOVERY_Y_OFFSET + 0 * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						WALL_COLOR
-					);
-
-					// south
-					al_draw_filled_rectangle(
-						MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_Y_OFFSET + WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_X_OFFSET + x * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						MAZE_DISCOVERY_Y_OFFSET + WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						WALL_COLOR
-					);
-				}
-				*/
-				for (size_t y = 1; y < MAZE_WALL_SIZE; ++y)
-				{
-					// west
-					al_draw_filled_rectangle(
-						MAZE_DISCOVERY_X_OFFSET + 0 * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_X_OFFSET + 0 * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						(box) ? WALL_COLOR : UNDISCOVERED_WALL_COLOR
-					);
-
-					// east
-					al_draw_filled_rectangle(
-						MAZE_DISCOVERY_X_OFFSET + MAZE_WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH),
-						MAZE_DISCOVERY_X_OFFSET + MAZE_WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						MAZE_DISCOVERY_Y_OFFSET + y * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH,
-						(box) ? WALL_COLOR : UNDISCOVERED_WALL_COLOR
-					);
-				}
-				
-
 				
 			}
 		}

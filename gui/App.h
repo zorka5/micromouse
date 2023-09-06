@@ -29,11 +29,15 @@ namespace gui {
 		const MazeSimulator& maze_simulator;
 		MazeDiscovery& maze_discovery;
 		Mouse& mouse;
-		Discover discovery;
+		Discover& discover;
 
 	public:
-		App(const MazeSimulator& maze_simulator, MazeDiscovery& maze_discovery, Mouse& mouse, Discover& discovery);
-
+		App(
+			const MazeSimulator& maze_simulator,
+			MazeDiscovery& maze_discovery,
+			Mouse& mouse,
+			Discover& discover
+		);
 
 	public:
 		void run();

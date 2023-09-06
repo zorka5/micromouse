@@ -47,7 +47,7 @@ bool Discover::think()
 		const auto& direction = direction_.value();
 
 		// store historical position
-		path.emplace(std::make_pair(
+		path.emplace_front(std::make_pair(
 			position,
 			direction
 		));
@@ -67,8 +67,8 @@ bool Discover::think()
 	if (!path.empty())
 	{
 		// take path top as the last move
-		const auto top_ = std::move(path.top());
-		path.pop();
+		const auto top_ = std::move(path.front());
+		path.pop_front();
 		const auto& [position_next, direction] = top_;
 
 		// go in opposite direction
@@ -114,12 +114,11 @@ std::optional<Direction> Discover::random_direction(const Box& allowed)
 	return value.value();
 }
 
-std::stack<std::pair<MazeCoordinates, Direction>>& Discover::get_path()
+const Discover::Path& Discover::get_path() const
 {
 	return path;
 }
-
-std::unordered_multiset<MazeCoordinates>& Discover::get_visited()
+const Discover::Visited& Discover::get_visited() const
 {
 	return visited;
 }

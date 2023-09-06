@@ -26,6 +26,10 @@ const Box& Mouse::get_walls() const
 	assert(box);
 	return box.value();
 }
+const bool Mouse::is_end() const
+{
+	return maze_simulator.get_end() == position;
+}
 
 void Mouse::move(const Direction& direction)
 {
@@ -64,5 +68,8 @@ void Mouse::discover_position()
 	if (!maze_discovery.has_box(position)) {
 		auto box = maze_simulator.get_boxes().get(position);
 		maze_discovery.add_box(position, std::move(box));
+	}
+	if (is_end() && !maze_discovery.get_end()) {
+		maze_discovery.set_end(position);
 	}
 }

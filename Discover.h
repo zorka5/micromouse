@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stack>
+#include <forward_list>
 #include <unordered_set>
 #include <optional>
 
@@ -10,15 +10,15 @@
 class Discover
 {
 private:
-	using Stack = std::stack<std::pair<
+	using Path = std::forward_list<std::pair<
 		MazeCoordinates, // position before move
 		Direction // direction of the move
 		>>;
-	using CoordsSet = std::unordered_multiset<MazeCoordinates>;
+	using Visited = std::unordered_multiset<MazeCoordinates>;
 private:
 	Mouse& mouse;
-	Stack path;
-	CoordsSet visited;
+	Path path;
+	Visited visited;
 	// std::optional<MazeCoordinates> end;
 
 public:
@@ -31,7 +31,7 @@ private:
 	std::optional<Direction> random_direction(const Box& allowed);
 
 public:
-	Stack& get_path();
-	CoordsSet& get_visited();
+	const Path& get_path() const;
+	const Visited& get_visited() const;
 };
 

@@ -26,6 +26,7 @@ public:
 
 public:
 	const Box& get_walls() const;
+	const bool is_end() const;
 	void move(const Direction& direction);
 
 private:

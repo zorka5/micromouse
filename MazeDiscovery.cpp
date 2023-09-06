@@ -1,7 +1,9 @@
 #include "MazeDiscovery.h"
 #include "MazeDiscovery.h"
 
-MazeDiscovery::MazeDiscovery(): boxes(std::nullopt)
+MazeDiscovery::MazeDiscovery():
+	boxes(std::nullopt),
+	end()
 {
 }
 
@@ -9,6 +11,10 @@ MazeDiscovery::MazeDiscovery(): boxes(std::nullopt)
 const MazeDiscovery::Boxes& MazeDiscovery::get_boxes() const
 {
 	return boxes;
+}
+const std::optional<MazeCoordinates>& MazeDiscovery::get_end() const
+{
+	return end;
 }
 
 
@@ -21,4 +27,10 @@ void MazeDiscovery::add_box(const MazeCoordinates& maze_coordinates, Box&& box)
 	auto& current = boxes.get(maze_coordinates);
 	assert(!current);
 	current.emplace(std::move(box));
+}
+
+void MazeDiscovery::set_end(const MazeCoordinates& maze_coordinates)
+{
+	assert(!end);
+	end = maze_coordinates;
 }

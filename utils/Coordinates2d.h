@@ -27,6 +27,10 @@ namespace utils {
 		inline bool operator!=(const Coordinates2d& other) const {
 			return !(*this == other);
 		}
+		inline bool operator<(const Coordinates2d& other) const {
+			if (x_ != other.x()) return x_ < other.x();
+			return y_ < other.y();
+		}
 	};
 }
 

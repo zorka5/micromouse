@@ -1,27 +1,22 @@
 #pragma once
-
+#include <optional>
 #include <vector>
 
-#include "Maze.h"
-#include "MazeDiscovery.h"
+#include "../Maze.h"
+#include "../MazeDiscovery.h"
 
-class Solver
-{
+class Algorithm {
 public:
 	using Path = std::vector<MazeCoordinates>;
-private:
-	static std::vector<MazeCoordinates> neighbours(const MazeDiscovery& maze_discovery, const MazeCoordinates& position);
+
 public:
-	static Path solve_dfs(
-		const MazeCoordinates& start,
-		const MazeCoordinates& end,
-		const MazeDiscovery& maze_discovery
-	);
-	static Path solve_dijkstra(
-		const MazeCoordinates& start,
-		const MazeCoordinates& end,
-		const MazeDiscovery& maze_discovery
-	);
+	static std::vector<MazeCoordinates> neighbours(const MazeDiscovery& maze_discovery, const MazeCoordinates& position);
 
+public:
+	virtual const char* name() const = 0;
+	virtual Path solve(
+		const MazeCoordinates& start,
+		const MazeCoordinates& end,
+		const MazeDiscovery& maze_discovery
+	) const = 0;
 };
-

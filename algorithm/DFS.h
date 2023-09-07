@@ -1,0 +1,14 @@
+#include "Algorithm.h"
+
+#pragma once
+class DFS : public Algorithm
+{
+public:
+	const char* name() const override;
+	virtual Path solve(
+		const MazeCoordinates& start,
+		const MazeCoordinates& end,
+		const MazeDiscovery& maze_discovery
+	) const override;
+};
+

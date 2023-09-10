@@ -8,7 +8,7 @@ const char* Dijkstra::name() const
 	return "Dijkstra";
 }
 
-Algorithm::Path Dijkstra::solve(const MazeCoordinates& start, const MazeCoordinates& end, const MazeDiscovery& maze_discovery) const
+std::optional<Algorithm::Path> Dijkstra::solve(const MazeCoordinates& start, const MazeCoordinates& end, const MazeDiscovery& maze_discovery) const
 {
 	const auto& boxes = maze_discovery.get_boxes();
 
@@ -19,16 +19,15 @@ Algorithm::Path Dijkstra::solve(const MazeCoordinates& start, const MazeCoordina
 
 	for (size_t y = 0; y < MAZE_WALL_SIZE; ++y) {
 		for (size_t x = 0; x < MAZE_WALL_SIZE; ++x) {
-			const auto& position = MazeCoordinates(x, y);
+			const auto position = MazeCoordinates(x, y);
+
 			if (!boxes.get(position).has_value()) {
 				continue;
 			}
-			if (position == start) {
-				d[position] = 0.0;
-			}
-			else {
-				d[position] = std::numeric_limits <double>::max();
-			}
+			d.insert(std::make_pair(
+				position,
+				position == start ? 0.0 : std::numeric_limits <double>::max()
+			));
 			Q.insert(position);
 		}
 	}
@@ -53,8 +52,8 @@ Algorithm::Path Dijkstra::solve(const MazeCoordinates& start, const MazeCoordina
 		}
 
 		//get neighbours of u
-		const auto& neighbours_of_u = Algorithm::neighbours(maze_discovery, u);
-		for (auto& v : neighbours_of_u) {
+		const auto neighbours_of_u = Algorithm::neighbours(maze_discovery, u);
+		for (const auto& v : neighbours_of_u) {
 			const double dist_u = d.at(u);
 			const double dist_v = d.at(v);
 			const double alt = dist_u + 1;
@@ -68,18 +67,17 @@ Algorithm::Path Dijkstra::solve(const MazeCoordinates& start, const MazeCoordina
 	auto path = std::vector<MazeCoordinates>();
 	path.push_back(end);
 
-	MazeCoordinates current = end;
+	auto current = end;
 	while (current != start) {
 		const auto& previous_it = prev.find(current);
-		if (previous_it == prev.cend()) {
-			throw std::runtime_error("Path not consistent");
-		}
+
 		const auto& previous = previous_it->second;
 
 		path.push_back(previous);
 
 		current = previous;
 	}
+	
 	std::reverse(path.begin(), path.end());
 	return path;
 }

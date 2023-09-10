@@ -1,80 +1,52 @@
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 
 #include "MazeSimulator.h"
 #include "MazeDiscovery.h"
 #include "Mouse.h"
 #include "Discover.h"
-// #include "gui/App.h"
+#include "gui/App.h"
+#include "algorithm/Algorithm.h"
+#include "algorithm/Dijkstra.h"
+#include "algorithm/DFS.h"
 
 #include "Utils.h"
 
 void run() {
 	// srand((unsigned int) time(NULL));
 
-	const auto maze_simulator = MazeSimulator::parse(read_file_as_string("D:/Documents/Projects/micromouse/data/4.txt"));
+	const auto maze_simulator = MazeSimulator::parse(read_file_as_string("D:/Documents/Projects/micromouse/data/2.txt"));
 	auto maze_discovery = MazeDiscovery();
 	auto mouse = Mouse(
 		maze_simulator,
 		maze_discovery,
-		MazeCoordinates(15,15)
+		maze_simulator.get_start()
 	);
-	auto discovery = Discover(mouse);
+	auto discover = Discover(mouse);
 
-	size_t counter = 0;
-	while (true) {
-		auto exit = false;
-		const auto position = mouse.get_position();
-		if (!discovery.think())
-			exit = true;
-		const auto position_next = mouse.get_position();
-		++counter;
-		
-		std::cout << counter << " " << position << " -> " << position_next << std::endl;
-		// std::cin.get();
+	auto algorithm_dijsktra = std::unique_ptr<Algorithm>(new Dijkstra());
+	auto algorithm_dfs = std::unique_ptr<Algorithm>(new DFS());
 
-		if (exit)
-			break;
-	}
+	std::vector<Algorithm*> algorithms;
+	algorithms.push_back(algorithm_dijsktra.get());
+	//algorithms.push_back(algorithm_dfs.get());	
 
-
-	// auto app = gui::App(maze_simulator, maze_discovery);
-	// app.run();
+	auto app = gui::App(maze_simulator, maze_discovery, mouse, discover, algorithms, maze_simulator.get_start(), maze_simulator.get_end());
+	app.run();
 }
 int main()
 {
-	try {
-		run();
+	run();
+
+	/* try {
+		
 	}
 	catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
 	}
 	catch (...) {
 		std::cerr << "non c++ exception handled" << std::endl;
-	}
+	} */
 	return 0;
-
-	/*
-		MazeSimulator maze_simulator;
-		MazeDisocvery maze_discovery;
-		Mouse mouse {
-			Walls see(direction);
-			void move(direction)
-		}
-
-		MouseMover mover(maze_simulator, maze_discovery, mouse);
-
-		while(true)
-		{
-			clear_all();
-
-			draw_maze_discovery(maze_simulator);
-			draw_maze_discovery(maze_discovery);
-			draw_mouse(mouse);
-
-			switch event:
-				case SPACE:
-					mouse.mover();
-		}
-	*/
 }

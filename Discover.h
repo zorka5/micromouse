@@ -19,13 +19,14 @@ private:
 	Mouse& mouse;
 	Path path;
 	Visited visited;
-	// std::optional<MazeCoordinates> end;
+	bool completed;
 
 public:
 	Discover(Mouse& mouse);
 
 public:
-	bool think();
+	void think();
+	const bool& is_completed() const;
 
 private:
 	std::optional<Direction> random_direction(const Box& allowed);

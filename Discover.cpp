@@ -7,12 +7,13 @@
 Discover::Discover(Mouse& mouse) :
 	mouse(mouse),
 	path(),
-	visited()
+	visited(),
+	completed(false)
 {
 	// add initial node to visited list
 	visited.emplace(mouse.get_position());
 }
-bool Discover::think()
+void Discover::think()
 {
 	const auto position = mouse.get_position();
 
@@ -59,7 +60,7 @@ bool Discover::think()
 		const auto position_next = mouse.get_position();
 		visited.emplace(position_next);
 
-		return true;
+		return;
 	}
 
 	// there is no direction, so allowed list is empty
@@ -81,11 +82,15 @@ bool Discover::think()
 		// for statistics we add them again
 		visited.emplace(position_next);
 
-		return true;
+		return;
 	}
 
 	// there is nothing we can do
-	return false;
+	completed = true;
+}
+const bool& Discover::is_completed() const
+{
+	return completed;
 }
 
 std::optional<Direction> Discover::random_direction(const Box& allowed)

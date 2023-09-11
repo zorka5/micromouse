@@ -1,0 +1,27 @@
+var almsvc_8h =
+[
+    [ "__func__", "almsvc_8h.html#a7d6e1cf1a8d53f38471e9e9db3faf740", null ],
+    [ "_AL_DLL", "almsvc_8h.html#a609ea1ecd41062e4d7ff115263410bed", null ],
+    [ "AL_ARRAY", "almsvc_8h.html#a1ae76af28baeb8b1a913a12bc7f5a205", null ],
+    [ "AL_FUNC", "almsvc_8h.html#aad4b965593eec068a5372f54c57dc6c8", null ],
+    [ "AL_FUNCPTR", "almsvc_8h.html#acaf9daa577d31c0beae9568e30067c3a", null ],
+    [ "AL_INLINE", "almsvc_8h.html#a2ba88303f7575e89ca4ec3e83dfd3ae6", null ],
+    [ "AL_INLINE_STATIC", "almsvc_8h.html#a11c883573896146f49fd5ba739ca6b15", null ],
+    [ "AL_METHOD", "almsvc_8h.html#a211e750d5cfd9c9b029483a239a81e95", null ],
+    [ "AL_VAR", "almsvc_8h.html#ac3f27c4f17634825201562b928038951", null ],
+    [ "ALLEGRO_EXTRA_HEADER", "almsvc_8h.html#a83008ed5d2874fd74bf0b432fcc43211", null ],
+    [ "ALLEGRO_GUESS_INTTYPES_OK", "almsvc_8h.html#abfcdc80536e60e52dff25a6e4485472f", null ],
+    [ "ALLEGRO_I386", "almsvc_8h.html#a9e861d05ea678e48a64fae360dc0a1c1", null ],
+    [ "ALLEGRO_INTERNAL_HEADER", "almsvc_8h.html#a68cd7eae641d738e099076c64dcd2e87", null ],
+    [ "ALLEGRO_INTERNAL_THREAD_HEADER", "almsvc_8h.html#a5788eb4927e34d1609c84b573201f220", null ],
+    [ "ALLEGRO_LITTLE_ENDIAN", "almsvc_8h.html#a313d0fd78cb7a7e9a343e15d66bed015", null ],
+    [ "ALLEGRO_PLATFORM_STR", "almsvc_8h.html#a33acc1140b0349a1dcb7192471dd0d05", null ],
+    [ "ALLEGRO_WINDOWS", "almsvc_8h.html#a7cf463ad16f0baebeee5d583732a5135", null ],
+    [ "END_OF_INLINE", "almsvc_8h.html#a17db7deb3cedbb0b89f415ea5ab96a93", null ],
+    [ "INLINE", "almsvc_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116", null ],
+    [ "int64_t", "almsvc_8h.html#aa028d750c854cd520247fcab322e276c", null ],
+    [ "S_IRUSR", "almsvc_8h.html#a84c7dbf5cf2fdfb690f76348b60a8cb7", null ],
+    [ "S_IWUSR", "almsvc_8h.html#ad70001754261c15a1bdc8e876c6d09d7", null ],
+    [ "S_IXUSR", "almsvc_8h.html#af10a35e3950795d6ee4e07157d000131", null ],
+    [ "uint64_t", "almsvc_8h.html#a104204cb123abb831baa5adcfffc64e0", null ]
+];

@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['j_5fcommon_5fptr_0',['j_common_ptr',['../jpeglib_8h.html#a1a177ab705cefea8f30ec31a48e62650',1,'jpeglib.h']]],
+  ['j_5fcompress_5fptr_1',['j_compress_ptr',['../jpeglib_8h.html#add2a072c54e3a51550f4975f7ddb91e7',1,'jpeglib.h']]],
+  ['j_5fdecompress_5fptr_2',['j_decompress_ptr',['../jpeglib_8h.html#a00c7d78af44bd26a901c791ccfc1e178',1,'jpeglib.h']]],
+  ['jblock_3',['JBLOCK',['../jpeglib_8h.html#a973d7fc359b83b76bd27ded811674884',1,'jpeglib.h']]],
+  ['jblockarray_4',['JBLOCKARRAY',['../jpeglib_8h.html#ab03cfeb937b60b9b73ca6e3cf935af49',1,'jpeglib.h']]],
+  ['jblockimage_5',['JBLOCKIMAGE',['../jpeglib_8h.html#a50ba15e677a2f4bf91712607a632efa9',1,'jpeglib.h']]],
+  ['jblockrow_6',['JBLOCKROW',['../jpeglib_8h.html#ac5b7ef350cbf23a365ef6e11044ee71e',1,'jpeglib.h']]],
+  ['jcoef_7',['JCOEF',['../jmorecfg_8h.html#aea08c9c2f5affb975e4615eda7d77f6e',1,'jmorecfg.h']]],
+  ['jcoefptr_8',['JCOEFPTR',['../jpeglib_8h.html#a673b6e5ff2706144221ea3f6e573536d',1,'jpeglib.h']]],
+  ['jdimension_9',['JDIMENSION',['../jmorecfg_8h.html#a04ed4674f6f1d0d50ec241531e38274f',1,'jmorecfg.h']]],
+  ['joctet_10',['JOCTET',['../jmorecfg_8h.html#a356ad249f20e691b520da439f92cccbc',1,'jmorecfg.h']]],
+  ['jpeg_5fmarker_5fparser_5fmethod_11',['jpeg_marker_parser_method',['../jpeglib_8h.html#a33cdb00bffed4f3941ff9f83b47fb576',1,'jpeglib.h']]],
+  ['jpeg_5fsaved_5fmarker_5fptr_12',['jpeg_saved_marker_ptr',['../jpeglib_8h.html#ac2ae4ad9de8160dae89a5af3e8bc7e97',1,'jpeglib.h']]],
+  ['jsamparray_13',['JSAMPARRAY',['../jpeglib_8h.html#ac9d5d1b829ed51769db69a37271a7e91',1,'jpeglib.h']]],
+  ['jsampimage_14',['JSAMPIMAGE',['../jpeglib_8h.html#a4bf858e4d42202287e786bdec2f3b62b',1,'jpeglib.h']]],
+  ['jsamprow_15',['JSAMPROW',['../jpeglib_8h.html#a57d1c52be424e0587386fa359f8b517d',1,'jpeglib.h']]],
+  ['jvirt_5fbarray_5fptr_16',['jvirt_barray_ptr',['../jpeglib_8h.html#a994f4cba141d82ded90af38e51223f0b',1,'jpeglib.h']]],
+  ['jvirt_5fsarray_5fptr_17',['jvirt_sarray_ptr',['../jpeglib_8h.html#abc0b975077507c35b5a577e3ce9e4d91',1,'jpeglib.h']]]
+];

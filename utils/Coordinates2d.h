@@ -5,6 +5,11 @@
 #include <cassert>
 
 namespace utils {
+	/// <summary>
+	/// Wrapper on x,y coordinates pair
+	/// </summary>
+	/// <typeparam name="X">X coordinate</typeparam>
+	/// <typeparam name="Y">Y coordinate</typeparam>
 	template<const size_t X, const size_t Y>
 	class Coordinates2d {
 	private:

@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['x_0',['x',['../struct_a_l_l_e_g_r_o___v_e_r_t_e_x.html#a669ecbfb8a90ca3c4da797229c404371',1,'ALLEGRO_VERTEX::x'],['../struct_a_l_l_e_g_r_o___d_i_s_p_l_a_y___e_v_e_n_t.html#a57062be4573ee70dd4ee34ddd0adc100',1,'ALLEGRO_DISPLAY_EVENT::x'],['../struct_a_l_l_e_g_r_o___m_o_u_s_e___e_v_e_n_t.html#ac0dab9fcd5e7da2b78da85b43f05361b',1,'ALLEGRO_MOUSE_EVENT::x'],['../struct_a_l_l_e_g_r_o___t_o_u_c_h___e_v_e_n_t.html#a202bca023c7ee2ec4a69a932c25748ec',1,'ALLEGRO_TOUCH_EVENT::x'],['../struct_a_l_l_e_g_r_o___m_o_u_s_e___s_t_a_t_e.html#a8689b8c2477124d36e8f27ba2b17ef7c',1,'ALLEGRO_MOUSE_STATE::x'],['../struct_g_l_x_buffer_clobber_event_s_g_i_x.html#a5118d48c3c8d5253d39922b5014b52ff',1,'GLXBufferClobberEventSGIX::x'],['../union____dpmi__regs.html#ad9b92d55307372a04319e8a5b8001157',1,'__dpmi_regs::x'],['../struct_a_l_l_e_g_r_o___t_o_u_c_h___s_t_a_t_e.html#a7eac8f1a20a0044e1ec2642adeca3f47',1,'ALLEGRO_TOUCH_STATE::x'],['../struct_d_u_m_b___r_e_s_a_m_p_l_e_r.html#a38778ed9ca2cefffcd6e68a42a1945c0',1,'DUMB_RESAMPLER::x'],['../struct_f_t___vector__.html#a941e818e6dfca06409cddff4f325f74c',1,'FT_Vector_::x'],['../struct_f_t___span__.html#a7f7235a404c66398b49c50fa09691ba5',1,'FT_Span_::x'],['../struct_f_t___unit_vector__.html#a03c9f8ae35a5ad1bcac49995a9dac714',1,'FT_UnitVector_::x'],['../fmaths_8inl.html#a7ba8ab2f1e8f362163e17da3f15a5db9',1,'x:&#160;fmaths.inl']]],
+  ['x1_1',['x1',['../struct_a_l_l_e_g_r_o___m_o_n_i_t_o_r___i_n_f_o.html#a1aeff110ae2d75b8d9ff6448950cab2f',1,'ALLEGRO_MONITOR_INFO']]],
+  ['x16_2',['x16',['../struct_d_u_m_b___r_e_s_a_m_p_l_e_r.html#af30b5545dad746acfbf7aec7a857aab1',1,'DUMB_RESAMPLER']]],
+  ['x2_3',['x2',['../struct_a_l_l_e_g_r_o___m_o_n_i_t_o_r___i_n_f_o.html#a497f33bcdcc713155186dd2396548c59',1,'ALLEGRO_MONITOR_INFO']]],
+  ['x24_4',['x24',['../struct_d_u_m_b___r_e_s_a_m_p_l_e_r.html#a80e6c85a2d43bfea9fa5ed2cb457683a',1,'DUMB_RESAMPLER']]],
+  ['x8_5',['x8',['../struct_d_u_m_b___r_e_s_a_m_p_l_e_r.html#ace2aa215157597f46c2174a4d0378deb',1,'DUMB_RESAMPLER']]],
+  ['x_5fdensity_6',['x_density',['../structjpeg__compress__struct.html#adef3c4b809ebca2a853b5659e177deaa',1,'jpeg_compress_struct::X_density'],['../structjpeg__decompress__struct.html#a69f0da1031f16c621438d123921ba745',1,'jpeg_decompress_struct::X_density']]],
+  ['x_5foffset_7',['x_offset',['../struct_web_p_iterator.html#a5cdafa3ad6bedc0f8eb47388f4361c75',1,'WebPIterator']]],
+  ['x_5fppem_8',['x_ppem',['../struct_f_t___size___metrics__.html#abb42b175a3450e9d8b84483f166d6c8a',1,'FT_Size_Metrics_::x_ppem'],['../struct_f_t___bitmap___size__.html#a6f877a792d2dc93328037c928979215f',1,'FT_Bitmap_Size_::x_ppem']]],
+  ['x_5fres_9',['x_res',['../struct_f_t_c___scaler_rec__.html#a886c7c1230dc5d5e6b3fc32d06274752',1,'FTC_ScalerRec_']]],
+  ['x_5fscale_10',['x_scale',['../struct_f_t___size___metrics__.html#a5e92028bb9881e107a6fb75d557eaff1',1,'FT_Size_Metrics_']]],
+  ['xadvance_11',['xadvance',['../struct_f_t_c___s_bit_rec__.html#a502a0bb69d973d2ae626a842eb9fefd3',1,'FTC_SBitRec_']]],
+  ['xavgcharwidth_12',['xAvgCharWidth',['../struct_t_t___o_s2__.html#af903883918479780d17a72f6fee992bd',1,'TT_OS2_']]],
+  ['xflags_13',['xflags',['../structgz__header__s.html#a40e35dc1a967c6537c6012cf5416210a',1,'gz_header_s']]],
+  ['xheight_14',['xHeight',['../struct_t_t___p_c_l_t__.html#a4b2f3e6bf6508eacbff5e4eb16745872',1,'TT_PCLT_']]],
+  ['xmax_15',['xmax',['../struct_f_t___b_box__.html#ac6da5c44f4cb7b97eef1f438eb69c0ec',1,'FT_BBox_::xMax'],['../struct_t_t___header__.html#a593b9cc3e11532972a7fc96944dd1ae9',1,'TT_Header_::xMax']]],
+  ['xmax_5fextent_16',['xMax_Extent',['../struct_t_t___hori_header__.html#ab483cb323f9adc9d959209a42eb19957',1,'TT_HoriHeader_']]],
+  ['xmin_17',['xmin',['../struct_f_t___b_box__.html#a1f2a5d0565d496c1d41e43d018f45add',1,'FT_BBox_::xMin'],['../struct_t_t___header__.html#ae4553d76427d9f7a28595ed71897dcbb',1,'TT_Header_::xMin']]],
+  ['xoffset_18',['xoffset',['../jpeglib_8h.html#a9cf8bb825f2047027cadbc566a73a498',1,'jpeglib.h']]],
+  ['xorigin_19',['XOrigin',['../struct_g_l_x_pipe_rect_limits.html#a3e5a965059d9f5d2ca42acd35af5bb9b',1,'GLXPipeRectLimits']]],
+  ['xuid_20',['xuid',['../struct_c_i_d___face_info_rec__.html#a32cd8836dd8a395d9aa6fb5831f06b27',1,'CID_FaceInfoRec_']]],
+  ['xx_21',['xx',['../struct_f_t___matrix__.html#a27d51c2958634abe7bf377610e095f74',1,'FT_Matrix_']]],
+  ['xy_22',['xy',['../struct_f_t___matrix__.html#a7e9f439d37c00ba1a11919bcaa8937a2',1,'FT_Matrix_']]]
+];

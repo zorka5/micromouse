@@ -16,7 +16,7 @@
 void run() {
 	srand((unsigned int) time(NULL));
 
-	const auto maze_simulator = MazeSimulator::parse(read_file_as_string("D:/Documents/Projects/micromouse/data/3.txt"));
+	const auto maze_simulator = MazeSimulator::parse(read_file_as_string("./data/4.txt"));
 	auto maze_discovery = MazeDiscovery();
 	auto mouse = Mouse(
 		maze_simulator,
@@ -38,15 +38,5 @@ void run() {
 int main()
 {
 	run();
-
-	/* try {
-		
-	}
-	catch (const std::exception& e) {
-		std::cerr << e.what() << std::endl;
-	}
-	catch (...) {
-		std::cerr << "non c++ exception handled" << std::endl;
-	} */
 	return 0;
 }

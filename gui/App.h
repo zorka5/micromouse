@@ -65,7 +65,7 @@ namespace gui {
 		void draw();
 
 		void draw_box(const WindowCoordinates& offset, const MazeCoordinates& box_coord, const ALLEGRO_COLOR& color);
-		void draw_line(const WindowCoordinates& offset, const MazeCoordinates& start, const MazeCoordinates& end, const ALLEGRO_COLOR& color);
+		void draw_line(const WindowCoordinates& offset, const MazeCoordinates& start, const MazeCoordinates& end, const ALLEGRO_COLOR& color, float thickness);
 
 		void draw_maze_simulator(const WindowCoordinates& offset);
 		void draw_maze_discovery(const WindowCoordinates& offset);

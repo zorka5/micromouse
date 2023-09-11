@@ -70,11 +70,13 @@ std::optional<Algorithm::Path> Dijkstra::solve(const MazeCoordinates& start, con
 	auto current = end;
 	while (current != start) {
 		const auto& previous_it = prev.find(current);
+		
+		if (previous_it == prev.cend()) {
+				return std::nullopt;
+		}
 
 		const auto& previous = previous_it->second;
-
 		path.push_back(previous);
-
 		current = previous;
 	}
 	

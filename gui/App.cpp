@@ -109,10 +109,6 @@ namespace gui {
 			bool do_exit = false;
 
 			switch (event.type) {
-				/* case ALLEGRO_EVENT_TIMER: {
-					do_tick = true;
-					break;
-				} */
 			case ALLEGRO_EVENT_DISPLAY_CLOSE:
 				do_exit = true;
 				break;
@@ -183,14 +179,14 @@ namespace gui {
 		);
 	}
 	
-	void App::draw_line(const WindowCoordinates& offset, const MazeCoordinates& start, const MazeCoordinates& end, const ALLEGRO_COLOR& color) {
+	void App::draw_line(const WindowCoordinates& offset, const MazeCoordinates& start, const MazeCoordinates& end, const ALLEGRO_COLOR& color, float thickness) {
 		al_draw_line(
 			offset.x() + start.x() * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH / 2,
 			offset.y() + start.y() * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH / 2,
 			offset.x() + end.x() * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH / 2,
 			offset.y() + end.y() * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + MAZE_CELL_WIDTH / 2,
 			color,
-			2
+			thickness
 		);
 	}
 
@@ -552,12 +548,13 @@ namespace gui {
 		MazeCoordinates previous = mouse.get_position();
 
 		for (const auto& [position, _] : discover.get_path()) {
-			draw_line(offset, position, previous, PATH_COLOR);
+			draw_line(offset, position, previous, PATH_COLOR, 2);
 			previous = position;
 		}
 	}
 
 	void App::draw_solved_path(const WindowCoordinates& offset, const ALLEGRO_COLOR& color) {
+		float thickness_start = path_search_state.size();
 		for (const auto& path : path_search_state) {
 			int r = std::rand() % 256;
 			int g = std::rand() % 256;
@@ -565,15 +562,17 @@ namespace gui {
 			for (auto i = path.value().begin(); i < path.value().end() - 1;) {
 				const auto& current =*(i);
 				const auto& next = *(++i);
-				draw_line(offset, current, next, al_map_rgb(r, g, b));
+				draw_line(offset, current, next, al_map_rgb(r, g, b), thickness_start*2);
 			}
+			thickness_start--;
 		}
 	}
 
-	void App::create_paths() {
-		std::cout << "Create paths";
+   	void App::create_paths() {
 		for (const auto& algorithm : algorithms) {
-			path_search_state.push_back(algorithm->solve(start, end, maze_discovery));
+			if (algorithm->solve(start, end, maze_discovery).has_value()) {
+				path_search_state.push_back(algorithm->solve(start, end, maze_discovery));
+			}
 		}
 	}
 }

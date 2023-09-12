@@ -2,11 +2,15 @@
 
 #include <vector>
 #include <memory>
+#include <utility>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+
+
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_native_dialog.h>
 
 #include "../MazeSimulator.h"
 #include "../MazeDiscovery.h"
@@ -29,7 +33,7 @@ namespace gui {
 	{
 	private:
 		static const size_t WINDOW_WIDTH = 1000;
-		static const size_t WINDOW_HEIGHT = 500;
+		static const size_t WINDOW_HEIGHT = 600;
 
 		using WindowCoordinates = utils::Coordinates2d<WINDOW_WIDTH, WINDOW_HEIGHT>;
 		const WindowCoordinates& simulator_offset = WindowCoordinates(50, 50);
@@ -47,7 +51,7 @@ namespace gui {
 		const MazeCoordinates& end;
 
 	private:
-		std::vector<std::optional<Algorithm::Path>> path_search_state;
+		std::vector<std::pair<std::optional<Algorithm::Path>, const char*>> path_search_state;
 
 	public:
 		App(

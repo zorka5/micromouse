@@ -27,6 +27,8 @@ namespace gui {
 
 	const ALLEGRO_COLOR MOUSE_COLOR = al_map_rgb(255, 0, 0);
 
+	
+
 
 	App::App(
 		const MazeSimulator& maze_simulator,
@@ -554,24 +556,34 @@ namespace gui {
 	}
 
 	void App::draw_solved_path(const WindowCoordinates& offset, const ALLEGRO_COLOR& color) {
+		const size_t font_size = 20;
+		ALLEGRO_FONT* font = al_load_font("OpenSans-Bold.ttf", font_size, NULL);
 		float thickness_start = path_search_state.size();
 		for (const auto& path : path_search_state) {
 			int r = std::rand() % 256;
 			int g = std::rand() % 256;
 			int b = std::rand() % 256;
-			for (auto i = path.value().begin(); i < path.value().end() - 1;) {
+			for (auto i = path.first.value().begin(); i < path.first.value().end() - 1;) {
 				const auto& current =*(i);
 				const auto& next = *(++i);
 				draw_line(offset, current, next, al_map_rgb(r, g, b), thickness_start*2);
 			}
+			size_t x_text = offset.x();
+			size_t y_text = offset.y() + MAZE_WALL_SIZE * (MAZE_CELL_WIDTH + MAZE_WALL_WIDTH) + MAZE_WALL_WIDTH + font_size *(thickness_start) + 10;
+			al_draw_text(font, al_map_rgb(r, g, b), x_text, y_text, ALLEGRO_ALIGN_LEFT, path.second);
+
 			thickness_start--;
 		}
+
+		al_destroy_font(font);
 	}
 
    	void App::create_paths() {
 		for (const auto& algorithm : algorithms) {
 			if (algorithm->solve(start, end, maze_discovery).has_value()) {
-				path_search_state.push_back(algorithm->solve(start, end, maze_discovery));
+				path_search_state.push_back(
+					std::make_pair(algorithm->solve(start, end, maze_discovery), algorithm->name())
+				);
 			}
 		}
 	}
